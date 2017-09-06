@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #won{
+            margin-left:25%;
+            height: 50px;
+
+        }
+        #won li {
+            float: left;
+            list-style: none;
+            margin-right: 10px;
+            background-color: orange;
+            padding: 10px;
+            color: white;
+        }
+        a {
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #tow li{
+            float: left;
+            width: 200px;
+            height: 400px;
+            list-style: none;
+        }
+        img{
+            width: 200px;
+            height: 300px;
+        }
+        #tow{
+            text-align: center;
+            width: 1000px;
+            height: 800px;
+            margin-left: 12.5%;
+        }
+    </style>
+</head>
+<body>
+    <h2></h2>
+    <ul id="won"></ul>
+    <ul id="tow"></ul>
+    <script src="myajax.js" charset="utf-8"></script>
+    <script>
+        var oH2 = document.querySelector('h2');
+        var oUl1 = document.getElementsByTagName('ul')[0];
+        var oUl2 = document.getElementsByTagName('ul')[1];
+        myajax.get('http://h6.duchengjiu.top/shop/api_cat.php', {}, function(error, responseText){
+            var json = JSON.parse(responseText);
+            var data = json.data;
+
+            for (var i = 0; i < data.length; i++) {
+                var obj = data[i];
+                oUl1.innerHTML += '<li><a href="#">' + obj.cat_name + '</a></li>';
+            }
+        });
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === xhr.DONE) {
+                try {
+                    var json = JSON.parse(xhr.responseText);
+                    var data = json.data;
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        var oLi = document.createElement('li');
+                        var oA = document.createElement('a');
+                        var oImg = document.createElement('img');
+                        oImg.src = obj.goods_thumb;
+                        oA.innerText = obj.goods_desc;
+                        oA.href = "#";
+                        oLi.appendChild(oImg);
+                        oLi.appendChild(oA);
+                        oUl2.appendChild(oLi);
+                    }
+                } catch (error) {
+
+                }
+            }
+        }
+        xhr.open('GET', 'http://h6.duchengjiu.top/shop/api_goods.php?page=3&pagesize=10');
+        xhr.send();
+    </script>
+</body>
+</html>
